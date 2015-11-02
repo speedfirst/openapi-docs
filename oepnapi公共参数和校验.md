@@ -33,14 +33,17 @@ Yingmi OpenAPI通过校验的形式确定Yingmi OpenAPI调用者（以下简称�
 
 如果请求HTTP Method为Get，则方法名为“GET” （全大写）；如果为Post, 则方法名为“POST”(全大写)。
 
-URL Path是指请求URL第一个base URL后，至Query String开始的部分。如“创建一个账户”的api URL为"https://api.yingmi.cn/v1/account/createAccount?accountName='浩宁'", 线上系统规定https://api.yingmi.cn/v1"
+URL Path是指请求URL第一个base URL后，至Query String开始的部分。如“创建一个账户”的api URL为"https://api.yingmi.cn/v1/account/createAccount?accountName='浩宁'", 盈米openapi生产系统规定https://api.yingmi.cn/v1"
 为Base Url。则Path为"/account/createAccount".
 
 ## 步骤2 将所有参数排序和拼接
 
 将请求中query string和body中所有参数放到一起，按照参数名字典升序排序，以"参数名=参数值"格式拼接每一个参数，最后将所有参数用"&"拼接到一起。 这些拼接到一起的参数包括除sig之外的所有公共参数。
 
-*注意*: 参数拼接过程在调用者应当发生在参数被URL Encoded之前；在盈米服务器端应该发生在参数被URL Encoded以后。拼接的参数不需要经过URL Encode，例如符号“&”，“：”或者中文等都应该保持原样。拼接过程与请求被传输过程中的编码过程是两件互不干扰的过程。
+
+**注意**: 如果参数的值为空（例如"foo=&bar=4"中的foo），则该参数不参与拼接和计算。对于sig计算来说，可以认为他们不存在。
+
+**注意**: 参数拼接过程在调用者应当发生在参数被URL Encoded之前；在盈米服务器端应该发生在参数被URL Encoded以后。拼接的参数不需要经过URL Encode，例如符号“&”，“：”或者中文等都应该保持原样。拼接过程与请求被传输过程中的编码过程是两件互不干扰的过程。
 
 例如“创建账户”api请求的参数为:
 
