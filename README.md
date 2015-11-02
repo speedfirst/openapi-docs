@@ -4,4 +4,5 @@
 
 本项目中包括了盈米开放接口的所有介绍性文档。
 
+* [opneapi公共参数和校验](oepnapi公共参数和校验.md)
 * [openapi错误码](openapi错误码.md)
