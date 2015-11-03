@@ -159,6 +159,8 @@ def get_sig(method, path, params, secret):
 ## Nodejs
 
 ```javascript
+var _ = require('lodash');
+
 function getSig(method, path, params, secret) {
   delete params.sig; // sig doesn't participate in sig calculation
   var paramNames = _.keys(params).sort();
