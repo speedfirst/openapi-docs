@@ -106,7 +106,7 @@ import hmac
 import hashlib
 import base64
 
-def openapiauth(method, path, params, secret):
+def get_sig(method, path, params, secret):
     if 'dig' in params: # sig doesn't participate in sig calculation
         del params['sig']
     unified_string = method + ':' + path + ':'
@@ -123,12 +123,43 @@ def openapiauth(method, path, params, secret):
 
 ## Java
 
-//TODO
+```java
+    String getSig(String method, String path, String apiSecret, Map<String, String> params) {
+        StringBuilder sb = new StringBuilder();
+        Set<String> keySet = new TreeSet<String>(params.keySet());
+        for (String key: keySet) {
+            sb.append(key);
+            sb.append("=");
+            sb.append(params.get(key));
+            sb.append("&");
+        }
+        sb.setLength(sb.length() - 1); // trim the last "&"
+        String unifiedString = method.toUpperCase() + ":" + path + ":" + sb.toString();
+
+        // calc hmac sha1
+        try {
+            SecretKeySpec secret = new SecretKeySpec(apiSecret.getBytes(), "HmacSHA1");
+            Mac mac = Mac.getInstance("HmacSHA1");
+            mac.init(secret);
+            byte[] hmac = mac.doFinal(unifiedString.getBytes()); // UTF8 is the default encoding in java
+
+            // base64 encode the hmac
+            String sig = Base64.getEncoder().encodeToString(hmac);
+            return sig;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+```
 
 ## Nodejs
 
 ```javascript
-function openapiAuth(method, path, params, secret) {
+function getSig(method, path, params, secret) {
   delete params.sig; // sig doesn't participate in sig calculation
   var paramNames = _.keys(params).sort();
   var unifiedString = method + ':' + path + ':';
