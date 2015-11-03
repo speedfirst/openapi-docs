@@ -114,7 +114,10 @@ def get_sig(method, path, params, secret):
     param_names.sort()
     params_kv = []
     for param_name in param_names:
-        params_kv.append(param_name + "=" + params[param_name])
+        param_value = params_kv[param_name]
+        if param_value != '' and param_value != None:
+            continue # ignore all the params with empty value
+        params_kv.append(param_name + "=" + param_value)
     unified_string += '&'.join(params_kv)
     digest = hmac.new(secret, unified_string, hashlib.sha1).digest()
     sig = base64.standard_b64encode(digest)
@@ -128,6 +131,10 @@ def get_sig(method, path, params, secret):
         StringBuilder sb = new StringBuilder();
         Set<String> keySet = new TreeSet<String>(params.keySet());
         for (String key: keySet) {
+            String value = params.get(key);
+            if (value == null || value.length = 0) {
+                continue; // ignore all the params with empty value
+            }
             sb.append(key);
             sb.append("=");
             sb.append(params.get(key));
@@ -167,7 +174,11 @@ function getSig(method, path, params, secret) {
   var unifiedString = method + ':' + path + ':';
   var paramsKV = [];
   for (var paramName of paramNames) {
-    paramsKV.push(paramName + '=' + params[paramName]);
+    var paramValue = params[paramName];
+    if (paramValue === '' || paramValue === null || paramValue === undefined) {
+        continue; // ignore all the params with empty value
+    }
+    paramsKV.push(paramName + '=' + paramValue);
   }
   unifiedString += paramsKV.join('&');
 
