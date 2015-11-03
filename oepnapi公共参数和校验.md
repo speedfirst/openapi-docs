@@ -132,7 +132,7 @@ def get_sig(method, path, params, secret):
         Set<String> keySet = new TreeSet<String>(params.keySet());
         for (String key: keySet) {
             String value = params.get(key);
-            if (value == null || value.length = 0) {
+            if (value == null || value.length == 0) {
                 continue; // ignore all the params with empty value
             }
             sb.append(key);
