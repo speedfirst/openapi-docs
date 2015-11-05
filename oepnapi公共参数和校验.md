@@ -107,7 +107,7 @@ import hashlib
 import base64
 
 def get_sig(method, path, params, secret):
-    if 'dig' in params: # sig doesn't participate in sig calculation
+    if 'sig' in params: # sig doesn't participate in sig calculation
         del params['sig']
     unified_string = method + ':' + path + ':'
     param_names = params.keys()
