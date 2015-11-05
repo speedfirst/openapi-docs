@@ -114,7 +114,7 @@ def get_sig(method, path, params, secret):
     param_names.sort()
     params_kv = []
     for param_name in param_names:
-        param_value = params_kv[param_name]
+        param_value = params[param_name]
         if param_value != '' and param_value != None:
             continue # ignore all the params with empty value
         params_kv.append(param_name + "=" + param_value)
